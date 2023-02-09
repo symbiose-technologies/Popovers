@@ -42,7 +42,7 @@ struct NestedViewPopover: View {
                 .popover(
                     present: $present,
                     attributes: {
-                        $0.sourceFrameInset = UIEdgeInsets(top: 0, left: 0, bottom: -12, right: -12)
+                        $0.sourceFrameInset = PlatformEdgeInsets(top: 0, left: 0, bottom: -12, right: -12)
                     }
                 ) {
                     NestedViewPopover()

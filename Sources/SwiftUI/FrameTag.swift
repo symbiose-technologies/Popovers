@@ -6,7 +6,7 @@
 //  Copyright © 2022 A. Zheng. All rights reserved.
 //
 
-#if os(iOS)
+//#if os(iOS)
 import SwiftUI
 
 /**
@@ -53,7 +53,7 @@ public extension View {
     }
 }
 
-public extension UIResponder {
+public extension UniversalResponder {
     /**
      Get the saved frame of a frame-tagged view inside this window. You must first set the frame using `.frameTag(_:)`.
      - parameter tag: The tag that you used for the frame.
@@ -77,7 +77,7 @@ public extension UIResponder {
     }
 }
 
-public extension Optional where Wrapped: UIResponder {
+public extension Optional where Wrapped: UniversalResponder {
     /**
      Get the saved frame of a frame-tagged view inside this window. You must first set the frame using `.frameTag(_:)`. This is a convenience overload for optional `UIResponder`s.
      - parameter tag: The tag that you used for the frame.
@@ -90,4 +90,4 @@ public extension Optional where Wrapped: UIResponder {
         return .zero
     }
 }
-#endif
+//#endif

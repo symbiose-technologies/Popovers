@@ -6,7 +6,7 @@
 //  Copyright © 2022 A. Zheng. All rights reserved.
 //
     
-#if os(iOS)
+
 import SwiftUI
 
 public extension Templates {
@@ -44,4 +44,3 @@ public extension Templates {
         }
     }
 }
-#endif

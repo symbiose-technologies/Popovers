@@ -20,7 +20,6 @@ struct Testing: View {
             VStack {
                 InsideNavigationView()
                 MenuComparisonView()
-                UIKitMenuView()
                 PresentWithinSheetView()
             }
         }

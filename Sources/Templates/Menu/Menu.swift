@@ -6,7 +6,7 @@
 //  Copyright © 2022 A. Zheng. All rights reserved.
 //
 
-#if os(iOS)
+
 import SwiftUI
 
 public extension Templates {
@@ -19,13 +19,13 @@ public extension Templates {
         public var labelFadeAnimation = Animation.default /// The animation used when calling the `fadeLabel`.
         public var clipContent = true /// Replicate the system's default clipping animation.
         public var clipAlignment = Alignment.top /// Which edge the clipping animation should be animate from.
-        public var sourceFrameInset = UIEdgeInsets(top: -8, left: -8, bottom: -8, right: -8)
-        public var screenEdgePadding = UIEdgeInsets(top: 48, left: 16, bottom: 32, right: 16)
+        public var sourceFrameInset = PlatformEdgeInsets(top: -8, left: -8, bottom: -8, right: -8)
+        public var screenEdgePadding = PlatformEdgeInsets(top: 48, left: 16, bottom: 32, right: 16)
         public var originAnchor = Popover.Attributes.Position.Anchor.bottom /// The label's anchor.
         public var popoverAnchor = Popover.Attributes.Position.Anchor.top /// The menu's anchor.
         public var scaleAnchor: Popover.Attributes.Position.Anchor? /// If nil, the anchor will be automatically picked.
         public var excludedFrames: (() -> [CGRect]) = { [] }
-        public var menuBlur = UIBlurEffect.Style.prominent
+//        public var menuBlur = UIBlurEffect.Style.prominent
         public var width: CGFloat? = CGFloat(240) /// If nil, hug the content.
         public var cornerRadius = CGFloat(14)
         public var shadow = Shadow.system
@@ -45,13 +45,13 @@ public extension Templates {
             labelFadeAnimation: Animation = .easeOut,
             clipContent: Bool = true,
             clipAlignment: Alignment = .top,
-            sourceFrameInset: UIEdgeInsets = .init(top: -8, left: -8, bottom: -8, right: -8),
-            screenEdgePadding: UIEdgeInsets = .init(top: 48, left: 16, bottom: 32, right: 16),
+            sourceFrameInset: PlatformEdgeInsets = .init(top: -8, left: -8, bottom: -8, right: -8),
+            screenEdgePadding: PlatformEdgeInsets = .init(top: 48, left: 16, bottom: 32, right: 16),
             originAnchor: Popover.Attributes.Position.Anchor = .bottom,
             popoverAnchor: Popover.Attributes.Position.Anchor = .top,
             scaleAnchor: Popover.Attributes.Position.Anchor? = nil,
             excludedFrames: @escaping (() -> [CGRect]) = { [] },
-            menuBlur: UIBlurEffect.Style = .prominent,
+//            menuBlur: UIBlurEffect.Style = .prominent,
             width: CGFloat? = CGFloat(240),
             cornerRadius: CGFloat = CGFloat(14),
             shadow: Shadow = .system,
@@ -74,7 +74,7 @@ public extension Templates {
             self.popoverAnchor = popoverAnchor
             self.scaleAnchor = scaleAnchor
             self.excludedFrames = excludedFrames
-            self.menuBlur = menuBlur
+//            self.menuBlur = menuBlur
             self.width = width
             self.cornerRadius = cornerRadius
             self.shadow = shadow
@@ -150,11 +150,13 @@ public extension Templates {
                     }
                     .onChange(of: model.hoveringItemID) { newValue in
 
+                        #if os(iOS)
                         /// Play haptic feedback if enabled.
                         if newValue != nil, configuration.hapticFeedbackEnabled {
                             let generator = UISelectionFeedbackGenerator()
                             generator.selectionChanged()
                         }
+                        #endif
                     }
             }
         }
@@ -308,7 +310,7 @@ public extension Templates {
         public init() {}
         public var body: some View {
             Rectangle()
-                .fill(Color(UIColor.label))
+                .fill(Color.secondary)
                 .opacity(0.15)
                 .frame(height: 7)
         }
@@ -335,7 +337,9 @@ public extension Templates {
 
                     /// Avoid limiting the frame of the content to ensure proper hit-testing (for popover dismissal).
                     .background(
-                        Templates.VisualEffectView(configuration.menuBlur)
+//                        Templates.VisualEffectView(configuration.menuBlur)
+                        Rectangle()
+                            .fill(.thinMaterial)
                             .cornerRadius(configuration.cornerRadius)
                             .popoverShadow(shadow: configuration.shadow)
                             .frame(height: expanded ? nil : context.frame.height / 3),
@@ -410,4 +414,3 @@ extension View {
         }
     }
 }
-#endif

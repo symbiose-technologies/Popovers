@@ -6,7 +6,7 @@
 //  Copyright © 2022 A. Zheng. All rights reserved.
 //
 
-#if os(iOS)
+
 import SwiftUI
 
 extension Templates {
@@ -30,7 +30,7 @@ extension Templates {
             newDragLocation: CGPoint,
             model: MenuModel,
             labelFrame: CGRect,
-            window: UIWindow?,
+            window: UniversalWindow?,
             present: @escaping ((Bool) -> Void),
             fadeLabel: @escaping ((Bool) -> Void)
         ) {
@@ -90,7 +90,7 @@ extension Templates {
             newDragLocation: CGPoint,
             model: MenuModel,
             labelFrame: CGRect,
-            window: UIWindow?,
+            window: UniversalWindow?,
             present: @escaping ((Bool) -> Void),
             fadeLabel: @escaping ((Bool) -> Void)
         ) {
@@ -143,4 +143,4 @@ extension Templates {
         }
     }
 }
-#endif
+

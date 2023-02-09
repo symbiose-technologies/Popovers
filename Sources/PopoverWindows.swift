@@ -6,7 +6,7 @@
 //  Copyright © 2022 A. Zheng. All rights reserved.
 //
 
-#if os(iOS)
+
 import SwiftUI
 
 /**
@@ -24,7 +24,7 @@ class WindowPopoverModels {
      `UIWindow` references are weakly retained to avoid us leaking application scenes that have been disposed of by iOS,
      e.g. when dismissed from the multitasking UI or explicitly closed by the app.
      */
-    private var windowModels = [Weak<UIWindow>: PopoverModel]()
+    private var windowModels = [Weak<UniversalWindow>: PopoverModel]()
 
     private init() {
         /// Enforcing singleton by marking `init` as private.
@@ -39,7 +39,7 @@ class WindowPopoverModels {
      - parameter window: The `UIWindow` whose `PopoverModel` is being requested, e.g. to present a popover.
      - Returns: The `PopoverModel` used to model the visible popovers for the given window.
      */
-    func popoverModel(for window: UIWindow) -> PopoverModel {
+    func popoverModel(for window: UniversalWindow) -> PopoverModel {
         /**
          Continually remove entries that refer to `UIWindow`s that are no longer about.
          The view hierarchies have already been dismantled - this is just for our own book keeping.
@@ -61,11 +61,11 @@ class WindowPopoverModels {
     }
 
     /// Get an existing popover model for this window if it exists.
-    private func existingPopoverModel(for window: UIWindow) -> PopoverModel? {
+    private func existingPopoverModel(for window: UniversalWindow) -> PopoverModel? {
         return windowModels.first(where: { holder, _ in holder.pointee === window })?.value
     }
 
-    private func prepareAndRetainModel(for window: UIWindow) -> PopoverModel {
+    private func prepareAndRetainModel(for window: UniversalWindow) -> PopoverModel {
         let newModel = PopoverModel()
         let weakWindowReference = Weak(pointee: window)
         windowModels[weakWindowReference] = newModel
@@ -87,7 +87,7 @@ class WindowPopoverModels {
     }
 }
 
-extension UIResponder {
+extension UniversalResponder {
     /**
      The `PopoverModel` in the current responder chain.
 
@@ -98,17 +98,17 @@ extension UIResponder {
      */
     var popoverModel: PopoverModel {
         /// If we're a view, continue to walk up the responder chain until we hit the root view.
-        if let view = self as? UIView, let superview = view.superview {
+        if let view = self as? PlatformView, let superview = view.superview {
             return superview.popoverModel
         }
 
         /// If we're a window, we define the scoping for the model - access it.
-        if let window = self as? UIWindow {
+        if let window = self as? UniversalWindow {
             return WindowPopoverModels.shared.popoverModel(for: window)
         }
 
         /// If we're a view controller, begin walking the responder chain up to the root view.
-        if let viewController = self as? UIViewController {
+        if let viewController = self as? PlatformViewController {
             return viewController.view.popoverModel
         }
 
@@ -121,7 +121,7 @@ extension UIResponder {
 /// For passing the hosting window into the environment.
 extension EnvironmentValues {
     /// Designates the `UIWindow` hosting the views within the current environment.
-    var window: UIWindow? {
+    var window: UniversalWindow? {
         get {
             self[WindowEnvironmentKey.self]
         }
@@ -131,9 +131,8 @@ extension EnvironmentValues {
     }
 
     private struct WindowEnvironmentKey: EnvironmentKey {
-        typealias Value = UIWindow?
+        typealias Value = UniversalWindow?
 
-        static var defaultValue: UIWindow? = nil
+        static var defaultValue: UniversalWindow? = nil
     }
 }
-#endif

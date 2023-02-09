@@ -6,7 +6,7 @@
 //  Copyright © 2022 A. Zheng. All rights reserved.
 //
 
-#if os(iOS)
+
 import SwiftUI
 
 public extension Templates {
@@ -15,13 +15,13 @@ public extension Templates {
     struct DividedVStack<Content: View>: View {
         var leadingMargin: CGFloat
         var trailingMargin: CGFloat
-        var color: UIColor?
+        var color: UniversalColor?
         var content: Content
 
         public init(
             leadingMargin: CGFloat = 0,
             trailingMargin: CGFloat = 0,
-            color: UIColor? = nil,
+            color: UniversalColor? = nil,
             @ViewBuilder content: () -> Content
         ) {
             self.leadingMargin = leadingMargin
@@ -46,7 +46,7 @@ public extension Templates {
     struct DividedVStackLayout: _VariadicView_UnaryViewRoot {
         var leadingMargin: CGFloat
         var trailingMargin: CGFloat
-        var color: UIColor?
+        var color: UniversalColor?
 
         @ViewBuilder
         public func body(children: _VariadicView.Children) -> some View {
@@ -119,4 +119,3 @@ public extension Templates {
         }
     }
 }
-#endif

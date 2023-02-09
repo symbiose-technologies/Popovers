@@ -108,7 +108,9 @@ struct TutorialViewPopover: View {
                             selection = "Step 2"
                         }
                     } label: {
-                        Templates.VisualEffectView(.systemChromeMaterialDark)
+//                        Templates.VisualEffectView(.systemChromeMaterialDark)
+                        Rectangle()
+                            .fill(.thinMaterial)
                             .frame(height: 60)
                             .overlay {
                                 Text("Search Bar")
@@ -152,7 +154,8 @@ struct TutorialViewPopover: View {
                             .font(.system(size: 48))
                             .padding()
                             .background(
-                                Templates.VisualEffectView(.systemChromeMaterialDark)
+                                .thinMaterial
+//                                Templates.VisualEffectView(.systemChromeMaterialDark)
                             )
                             .cornerRadius(16)
                     }

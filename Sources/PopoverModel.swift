@@ -6,7 +6,7 @@
 //  Copyright © 2022 A. Zheng. All rights reserved.
 //
 
-#if os(iOS)
+
 import Combine
 import SwiftUI
 
@@ -123,4 +123,3 @@ class PopoverModel: ObservableObject {
         return frame ?? .zero
     }
 }
-#endif

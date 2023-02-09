@@ -6,7 +6,6 @@
 //  Copyright © 2022 A. Zheng. All rights reserved.
 //
 
-#if os(iOS)
 import SwiftUI
 
 /**
@@ -33,6 +32,7 @@ public struct PopoverReader<Content: View>: View {
     }
 }
 
+
 /**
  Read the current `UIWindow` that hosts the view.
  Use this just like `GeometryReader`.
@@ -42,13 +42,13 @@ public struct PopoverReader<Content: View>: View {
  */
 public struct WindowReader<Content: View>: View {
     /// Your SwiftUI view.
-    public let view: (UIWindow?) -> Content
+    public let view: (UniversalWindow?) -> Content
 
     /// The read window.
     @StateObject var windowViewModel = WindowViewModel()
 
     /// Reads the `UIWindow` that hosts some SwiftUI content.
-    public init(@ViewBuilder view: @escaping (UIWindow?) -> Content) {
+    public init(@ViewBuilder view: @escaping (UniversalWindow?) -> Content) {
         self.view = view
     }
 
@@ -62,23 +62,23 @@ public struct WindowReader<Content: View>: View {
     }
 
     /// A wrapper view to read the parent window.
-    private struct WindowHandlerRepresentable: UIViewRepresentable {
+    private struct WindowHandlerRepresentable: PlatformAgnosticViewRepresentable {
         @ObservedObject var windowViewModel: WindowViewModel
 
-        func makeUIView(context _: Context) -> WindowHandler {
+        func makePlatformView(context _: Context) -> WindowHandler {
             return WindowHandler(windowViewModel: self.windowViewModel)
         }
 
-        func updateUIView(_: WindowHandler, context _: Context) {}
+        func updatePlatformView(_: WindowHandler, context _: Context) {}
     }
 
-    private class WindowHandler: UIView {
+    private class WindowHandler: PlatformView {
         var windowViewModel: WindowViewModel
 
         init(windowViewModel: WindowViewModel) {
             self.windowViewModel = windowViewModel
             super.init(frame: .zero)
-            backgroundColor = .clear
+            self.setBackgroundClear()
         }
 
         @available(*, unavailable)
@@ -86,6 +86,7 @@ public struct WindowReader<Content: View>: View {
             fatalError("[Popovers] - Create this view programmatically.")
         }
 
+        #if os(iOS)
         override func didMoveToWindow() {
             super.didMoveToWindow()
 
@@ -94,11 +95,19 @@ public struct WindowReader<Content: View>: View {
                 self.windowViewModel.window = self.window
             }
         }
+        #elseif os(macOS)
+        override func viewDidMoveToWindow() {
+            super.viewDidMoveToWindow()
+            DispatchQueue.main.async {
+                self.windowViewModel.window = self.window
+            }
+        }
+        #endif
+        
     }
 }
 
 class WindowViewModel: ObservableObject {
-    @Published var window: UIWindow?
+    @Published var window: UniversalWindow?
 }
 
-#endif

@@ -5,7 +5,7 @@
 //  Created by A. Zheng (github.com/aheze) on 12/23/21.
 //  Copyright © 2022 A. Zheng. All rights reserved.
 //
-#if os(iOS)
+
 import Combine
 import SwiftUI
 
@@ -86,12 +86,12 @@ public struct Popover: Identifiable {
         public var sourceFrame: (() -> CGRect) = { .zero }
 
         /// Inset the source frame by this.
-        public var sourceFrameInset = UIEdgeInsets.zero
+        public var sourceFrameInset = PlatformEdgeInsets.zero
 
         public var source = Source.stayAboveWindows
 
         /// Padding to prevent the popover from overflowing off the screen.
-        public var screenEdgePadding = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        public var screenEdgePadding = PlatformEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
 
         /// Stores popover animation and transition values for presentation.
         public var presentation = Presentation()
@@ -395,12 +395,12 @@ public struct Popover: Identifiable {
             }
         }
 
-        public var window: UIWindow {
+        public var window: UniversalWindow {
             if let window = presentedPopoverContainer?.window {
                 return window
             } else {
                 print("[Popovers] - This popover is not tied to a window. Please file a bug report (https://github.com/aheze/Popovers/issues).")
-                return UIWindow()
+                return UniversalWindow()
             }
         }
 
@@ -422,7 +422,7 @@ public struct Popover: Identifiable {
         internal var onDisappear: (() -> Void)?
 
         /// The `UIView` presenting this `Popover`, or `nil` if no popovers are currently being presented.
-        internal var presentedPopoverContainer: UIView?
+        internal var presentedPopoverContainer: PlatformView?
 
         internal var windowSublayersKeyValueObservationToken: NSKeyValueObservation?
 
@@ -487,7 +487,7 @@ public extension Popover {
 
             let screenEdgePadding = attributes.screenEdgePadding
 
-            let safeWindowFrame = window.safeAreaLayoutGuide.layoutFrame
+            let safeWindowFrame = window.safeAreaLayoutFrame
             let maxX = safeWindowFrame.maxX - screenEdgePadding.right
             let maxY = safeWindowFrame.maxY - screenEdgePadding.bottom
 
@@ -587,4 +587,3 @@ extension Popover: Equatable {
         return lhs.id == rhs.id
     }
 }
-#endif

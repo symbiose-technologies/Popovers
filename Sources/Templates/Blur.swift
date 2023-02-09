@@ -6,7 +6,7 @@
 //  Copyright © 2022 A. Zheng. All rights reserved.
 //
 
-#if os(iOS)
+#if canImport(UIKit)
 import SwiftUI
 
 public extension Templates {

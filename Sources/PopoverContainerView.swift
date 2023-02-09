@@ -6,7 +6,7 @@
 //  Copyright © 2022 A. Zheng. All rights reserved.
 //
 
-#if os(iOS)
+
 import SwiftUI
 
 /**
@@ -41,16 +41,16 @@ struct PopoverContainerView: View {
                             .accessibility(sortPriority: 1)
 
                         /// If VoiceOver is on and a `dismissButtonLabel` was set, show it.
-                        if
-                            UIAccessibility.isVoiceOverRunning,
-                            let dismissButtonLabel = popover.attributes.accessibility.dismissButtonLabel
-                        {
-                            Button {
-                                popover.dismiss()
-                            } label: {
-                                dismissButtonLabel
-                            }
-                        }
+//                        if
+//                            UIAccessibility.isVoiceOverRunning,
+//                            let dismissButtonLabel = popover.attributes.accessibility.dismissButtonLabel
+//                        {
+//                            Button {
+//                                popover.dismiss()
+//                            } label: {
+//                                dismissButtonLabel
+//                            }
+//                        }
                     }
                     /// Hide the popover until its size has been calculated.
                     .opacity(popover.context.size != nil ? 1 : 0)
@@ -263,4 +263,4 @@ struct PopoverContainerView: View {
         return selectedPopoverOffset
     }
 }
-#endif
+

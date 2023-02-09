@@ -29,7 +29,7 @@ struct NotificationView: View {
         .popover(
             present: $present,
             attributes: {
-                $0.sourceFrameInset = UIEdgeInsets(16)
+                $0.sourceFrameInset = PlatformEdgeInsets(16)
                 $0.position = .relative(
                     popoverAnchors: [
                         .top,

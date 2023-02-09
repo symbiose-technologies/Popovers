@@ -6,18 +6,18 @@
 //  Copyright © 2022 A. Zheng. All rights reserved.
 //
 
-#if os(iOS)
+
 import Combine
 import SwiftUI
 
-public extension UIView {
+public extension PlatformView {
     /// Convert a view's frame to global coordinates, which are needed for `sourceFrame` and `excludedFrames.`
     func windowFrame() -> CGRect {
         return convert(bounds, to: nil)
     }
 }
 
-public extension Optional where Wrapped: UIView {
+public extension Optional where Wrapped: PlatformView {
     /// Convert a view's frame to global coordinates, which are needed for `sourceFrame` and `excludedFrames.` This is a convenience overload for optional `UIView`s.
     func windowFrame() -> CGRect {
         if let view = self {
@@ -82,7 +82,7 @@ struct ContentSizeReaderPreferenceKey: PreferenceKey {
     static func reduce(value: inout CGSize, nextValue: () -> CGSize) { value = nextValue() }
 }
 
-public extension UIColor {
+public extension UniversalColor {
     /**
      Create a UIColor from a hex code.
 
@@ -151,7 +151,7 @@ public extension InsettableShape {
     }
 }
 
-public extension UIEdgeInsets {
+public extension PlatformEdgeInsets {
     /// The left + right insets.
     var horizontal: CGFloat {
         get {
@@ -174,7 +174,7 @@ public extension UIEdgeInsets {
 
     /// Create equal insets on all 4 sides.
     init(_ inset: CGFloat) {
-        self = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
+        self = PlatformEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
     }
 }
 
@@ -216,4 +216,3 @@ public extension View {
     }
 }
 
-#endif

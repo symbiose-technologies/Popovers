@@ -5,7 +5,7 @@
 //  Created by A. Zheng (github.com/aheze) on 1/4/22.
 //  Copyright © 2022 A. Zheng. All rights reserved.
 //
-#if os(iOS)
+
 import SwiftUI
 
 /**
@@ -15,7 +15,7 @@ public extension Popover {
     /**
      Present a popover in a window. It may be easier to use the `UIViewController.present(_:)` convenience method instead.
      */
-    internal func present(in window: UIWindow) {
+    internal func present(in window: UniversalWindow) {
         /// Create a transaction for the presentation animation.
         let transaction = Transaction(animation: attributes.presentation.animation)
 
@@ -33,14 +33,14 @@ public extension Popover {
                 model.add(self)
 
                 /// Stop VoiceOver from reading out background views if `blocksBackgroundTouches` is true.
-                if attributes.blocksBackgroundTouches {
-                    container.accessibilityViewIsModal = true
-                }
+//                if attributes.blocksBackgroundTouches {
+//                    container.accessibilityViewIsModal = true
+//                }
 
                 /// Shift VoiceOver focus to the popover.
-                if attributes.accessibility.shiftFocus {
-                    UIAccessibility.post(notification: .screenChanged, argument: nil)
-                }
+//                if attributes.accessibility.shiftFocus {
+//                    UIAccessibility.post(notification: .screenChanged, argument: nil)
+//                }
             }
         }
 
@@ -96,7 +96,7 @@ public extension Popover {
             }
 
             /// If at least one popover has `blocksBackgroundTouches` set to true, stop VoiceOver from reading out background views
-            context?.presentedPopoverContainer?.accessibilityViewIsModal = model.popovers.contains { $0.attributes.blocksBackgroundTouches }
+//            context?.presentedPopoverContainer?.accessibilityViewIsModal = model.popovers.contains { $0.attributes.blocksBackgroundTouches }
         }
 
         /// Remove this popover from the view model, dismissing it.
@@ -150,7 +150,7 @@ public extension Popover {
     }
 }
 
-public extension UIResponder {
+public extension UniversalResponder {
     /// Replace a popover with another popover. Convenience method for `Popover.replace(with:)`.
     func replace(_ oldPopover: Popover, with newPopover: Popover) {
         oldPopover.replace(with: newPopover)
@@ -178,7 +178,7 @@ public extension UIResponder {
     }
 }
 
-public extension UIViewController {
+public extension PlatformViewController {
     /// Present a `Popover` using this `UIViewController` as its presentation context.
     func present(_ popover: Popover) {
         guard let window = view.window else { return }
@@ -186,7 +186,7 @@ public extension UIViewController {
     }
 }
 
-extension UIView {
+extension PlatformView {
     var popoverContainerView: PopoverGestureContainer? {
         if let container = self as? PopoverGestureContainer {
             return container
@@ -201,4 +201,23 @@ extension UIView {
         }
     }
 }
+#if os(macOS)
+extension UniversalWindow {
+    var popoverContainerView: PopoverGestureContainer? {
+        if let container = contentView as? PopoverGestureContainer {
+            return container
+        } else {
+            if let subviews = contentView?.subviews {
+                for subview in subviews {
+                    if let container = subview.popoverContainerView {
+                        return container
+                    }
+                }
+            }
+            return nil
+        }
+    }
+}
+
+
 #endif

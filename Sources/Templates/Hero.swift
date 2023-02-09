@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-#if os(iOS)
 
 // MARK: Work in progress, not usable yet
 
@@ -65,4 +64,4 @@ public extension Templates {
         }
     }
 }
-#endif
+

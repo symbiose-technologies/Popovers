@@ -29,7 +29,8 @@ struct ExampleRow: View {
                     .font(.system(size: 19, weight: .medium))
                     .frame(width: 40, height: 40)
                     .background(
-                        Templates.VisualEffectView(.dark)
+                        .thinMaterial
+//                        Templates.VisualEffectView(.dark)
                     )
                     .cornerRadius(10)
                     .overlay {
@@ -107,7 +108,7 @@ struct ExampleImage: View {
     }
 }
 
-extension UIColor {
+extension UniversalColor {
     var color: Color {
         return Color(uiColor: self)
     }
@@ -127,14 +128,14 @@ extension UIColor {
     }
 }
 
-func == (l: UIColor?, r: UIColor?) -> Bool {
+func == (l: UniversalColor?, r: UniversalColor?) -> Bool {
     let l = l ?? .clear
     let r = r ?? .clear
     return l == r
 }
 
 /// get a gradient color
-extension UIColor {
+extension UniversalColor {
     func offset(by offset: CGFloat) -> UIColor {
         let (h, s, b, a) = hsba
         var newHue = h - offset

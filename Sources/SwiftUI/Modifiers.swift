@@ -6,7 +6,7 @@
 //  Copyright © 2022 A. Zheng. All rights reserved.
 //
 
-#if os(iOS)
+
 import Combine
 import SwiftUI
 
@@ -74,11 +74,11 @@ struct PopoverModifier: ViewModifier {
                 .onValueChange(of: present) { oldValue, newValue in
 
                     /// Make sure there is a window first.
-                    var window: UIWindow! = readWindow
+                    var window: UniversalWindow! = readWindow
                     if window == nil {
                         print("[Popovers] - No window was found when presenting popover, falling back to key window. Please file a bug report (https://github.com/aheze/Popovers/issues).")
 
-                        if let keyWindow = UIApplication.shared.windows.first(where: \.isKeyWindow) {
+                        if let keyWindow = UniversalWindow.getKeyWindow() {
                             window = keyWindow
                         } else {
                             print("[Popovers] - Key window was not found either, skipping popover presentation.")
@@ -98,7 +98,8 @@ struct PopoverModifier: ViewModifier {
                             if case .absolute = attributes.position {
                                 return sourceFrame ?? .zero
                             } else {
-                                return window.safeAreaLayoutGuide.layoutFrame
+                                
+                                return window.safeAreaLayoutFrame
                             }
                         }
 
@@ -217,11 +218,11 @@ struct MultiPopoverModifier: ViewModifier {
                 .onValueChange(of: selection) { oldSelection, newSelection in
 
                     /// Make sure there is a window first.
-                    var window: UIWindow! = readWindow
+                    var window: UniversalWindow! = readWindow
                     if window == nil {
                         print("[Popovers] - No window was found when presenting popover, falling back to key window. Please file a bug report (https://github.com/aheze/Popovers/issues).")
 
-                        if let keyWindow = UIApplication.shared.windows.first(where: \.isKeyWindow) {
+                        if let keyWindow = UniversalWindow.getKeyWindow() {
                             window = keyWindow
                         } else {
                             print("[Popovers] - Key window was not found either, skipping popover presentation.")
@@ -395,4 +396,5 @@ public extension View {
         )
     }
 }
-#endif
+
+
