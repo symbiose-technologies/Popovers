@@ -380,6 +380,7 @@ extension View {
 
                 /// Clicked (tap down, then lift) on a a selection
                 .onEnded { value in
+                    print("[Menu] on click/tap ended with value: \(value)")
                     withAnimation {
                         model.scale = 1
                     }
@@ -392,6 +393,7 @@ extension View {
                         /// The user lifted their finger outside an item target.
                         model.configuration.onLiftWithoutSelecting?()
                     } else if model.configuration.dismissAfterSelecting {
+                        
                         /// Dismiss if the user lifted up their finger on an item.
                         model.present = false
                     }

@@ -14,7 +14,7 @@ extension Templates {
     /// Gestures that started on the popover itself are handled by `MenuView`.
     class MenuGestureModel: ObservableObject {
         /// If the user is pressing down on the label, this will be a unique `UUID`.
-        @Published var labelPressUUID: UUID?
+        var labelPressUUID: UUID?
 
         /**
          If the label was pressed/dragged when the menu was already presented.
@@ -23,7 +23,7 @@ extension Templates {
         @Published var labelPressedWhenAlreadyPresented = false
 
         /// The current position of the user's finger.
-        @Published var dragLocation: CGPoint?
+        var dragLocation: CGPoint?
 
         /// Process the drag gesture, updating the menu to match.
         func onDragChanged(
@@ -42,24 +42,29 @@ extension Templates {
             if model.present == false {
                 /// The menu is not yet presented.
                 if labelPressUUID == nil {
-                    labelPressUUID = UUID()
-                    let currentUUID = labelPressUUID
-                    DispatchQueue.main.asyncAfter(deadline: .now() + configuration.holdDelay) {
-                        if
-                            currentUUID == self.labelPressUUID,
-                            let dragLocation = self.dragLocation /// check the location once again
-                        {
-                            if labelFrame.contains(dragLocation) {
-                                present(true)
-                            }
-                        }
-                    }
+//                    labelPressUUID = UUID()
+//                    print("[MenuGesture] t1: \(labelPressUUID!)")
+//                    let currentUUID = labelPressUUID
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + configuration.holdDelay) {
+//                        print("[MenuGesture] t2: current \(self.labelPressUUID?.uuidString ?? "none") local: \(currentUUID)")
+//                        print("[MenuGesture] t2: labelFrame: \(labelFrame) dragLocation: \(self.dragLocation) -- contains: \(CGRectContainsPoint(labelFrame, self.dragLocation ?? .zero))")
+//
+//                        if
+//                            currentUUID == self.labelPressUUID,
+//                            let dragLocation = self.dragLocation /// check the location once again
+//                        {
+//                            if labelFrame.contains(dragLocation) {
+//                                print("[MenuGesture] t2: Presenting menu!")
+//                                present(true)
+//                            }
+//                        }
+//                    }
                 }
 
-                withAnimation(configuration.labelFadeAnimation) {
-                    let shouldFade = labelFrame.contains(newDragLocation)
-                    fadeLabel(shouldFade)
-                }
+//                withAnimation(configuration.labelFadeAnimation) {
+//                    let shouldFade = labelFrame.contains(newDragLocation)
+//                    fadeLabel(shouldFade)
+//                }
             } else if labelPressUUID == nil {
                 /// The menu was already presented.
                 labelPressUUID = UUID()
@@ -120,7 +125,7 @@ extension Templates {
             } else {
                 if !model.present {
                     if labelFrame.contains(newDragLocation) {
-                        present(true)
+//                        present(true)
                     } else {
                         withAnimation(model.configuration.labelFadeAnimation) {
                             fadeLabel(false)

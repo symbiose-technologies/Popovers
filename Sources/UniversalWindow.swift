@@ -18,7 +18,8 @@ public extension UniversalWindow {
     }
     
     var safeAreaLayoutFrame: CGRect {
-        safeAreaLayoutGuide.layoutFrame
+        print("[ios] safeAreaLayoutFrame: \(safeAreaLayoutGuide.layoutFrame)")
+        return safeAreaLayoutGuide.layoutFrame
     }
 }
 
@@ -33,14 +34,27 @@ public extension UniversalWindow {
         return NSApplication.shared.windows.first(where: \.isKeyWindow)
     }
     var bounds: CGRect {
-        NSRectToCGRect(contentView?.bounds ?? NSRect(origin: .zero, size: .zero))
+        if let bounds = contentView?.bounds {
+            print("[UniversalWindow] bounds: \(bounds)")
+            return NSRectToCGRect(bounds)
+        } else {
+            print("[UniversalWindow] bounds -- ZERO")
+            return CGRect.zero
+        }
     }
     
     func addSubview(_ view: NSView) {
-        self.contentView?.addSubview(view)
+        print("mac [UniversalWindow] addSubview")
+        if let cView = contentView {
+            print("mac [UniversalWindow] addSubview -- window success")
+            cView.addSubview(view)
+        } else {
+            print("mac [UniversalWindow] addSubview -- NO CONTENT VIEW")
+        }
     }
     
     func bringSubviewToFront(_ view: NSView) {
+        print("[UniversalWindow] bringSubviewToFront")
         let superLayer = view.layer?.superlayer
         view.layer?.removeFromSuperlayer()
         if let viewLayer = view.layer {
@@ -49,12 +63,22 @@ public extension UniversalWindow {
     }
     
     var layer: CALayer {
-        contentView?.layer ?? CALayer.init()
+        if let layer = contentView?.layer {
+            print("[UniversalWindow] layer present")
+            return layer
+        } else {
+            print("[UniversalWindow] NO layer")
+            return CALayer.init()
+        }
     }
     
     var safeAreaLayoutFrame: CGRect {
-        let nsRect = contentView?.safeAreaLayoutGuide.frame ?? NSRect(origin: .zero, size: .zero)
-        return NSRectToCGRect(nsRect)
+//        let contentRect = frame
+//        let contentRect = contentLayoutRect
+        let contentRect = contentLayoutRect
+        print("[UniversalWindow] contentRect: \(contentRect)")
+        return NSRectToCGRect(contentRect)
+        
     }
 }
 extension CGRect {
@@ -217,29 +241,21 @@ extension UniversalColor {
             blue: hex & 0xff
         )
     }
+    convenience init(red: Int, green: Int, blue: Int) {
+        self.init(
+            red: CGFloat(red),
+            green: CGFloat(green),
+            blue: CGFloat(blue),
+            alpha: 1.0
+        )
+    }
 }
 #endif
 import SwiftUI
-import DynamicColor
+
 extension UniversalColor {
     var swiftUI: Color { Color(self) }
     
-    func lighten(_ amount: CGFloat = 0.2) -> UniversalColor {
-        self.toDynamic().lighter(amount: amount)
-    }
-    func darken(_ amount: CGFloat = 0.2) -> UniversalColor {
-        self.toDynamic().darkened(amount: amount)
-    }
-    
-    var hexStr: String { self.toRGB().hexString() }
-    
-    func toDynamic() -> DynamicColor {
-        #if os(iOS)
-        return DynamicColor(cgColor: self.cgColor)
-        #elseif os(macOS)
-        return DynamicColor(cgColor: self.cgColor) ?? DynamicColor.black
-        #endif
-    }
     
     func toRGB() -> RGB {
         let components = self.cgColor.components

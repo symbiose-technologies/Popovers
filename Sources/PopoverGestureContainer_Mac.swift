@@ -22,6 +22,7 @@ class PopoverGestureContainer: NSView {
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
 
+        
         /// Allow resizing.
         autoresizingMask = [.width, .height]
     }
@@ -39,6 +40,7 @@ class PopoverGestureContainer: NSView {
 
         /// Store the bounds for later.
         previousBounds = bounds
+        
     }
 
     override func viewDidMoveToWindow() {
@@ -47,15 +49,24 @@ class PopoverGestureContainer: NSView {
         /// There might not be a window yet, but that's fine. Just wait until there's actually a window.
         guard let window = window else { return }
 
+        print("[PopoverGestureContainer] viewDidMoveToWindow ignores mouseEvents: \(window.ignoresMouseEvents)")
+       
+        
         /// Create the SwiftUI view that contains all the popovers.
         let popoverContainerView = PopoverContainerView(popoverModel: popoverModel)
             .environment(\.window, window) /// Inject the window.
-
+        
+        //adding an nshostingview doesn't work
+        
+        
+        
         let hostingController = NSHostingController(rootView: popoverContainerView)
         hostingController.view.frame = bounds
         hostingController.view.wantsLayer = true
-        hostingController.view.layer?.backgroundColor = .clear
-
+        hostingController.view.autoresizingMask = [.width, .height]
+        
+        
+        
         addSubview(hostingController.view)
 
         /// Ensure the view is laid out so that SwiftUI animations don't stutter.
@@ -64,29 +75,84 @@ class PopoverGestureContainer: NSView {
 
         /// Let the presenter know that its window is available.
         onMovedToWindow?()
+//        DebugHelper.printResponderChain(from: self)
+//        print("$$$$$$$$$$$$$$$$$$$$$$$$$$ Making self firstResponder")
+//        window.makeFirstResponder(self)
+        DebugHelper.printResponderChain(from: self)
+
+
+        self.addCloseOnOutsideClick()
     }
     
+//    override func mouseDragged(with event: NSEvent) {
+//        print("[PopoverGestureContainer] mouseDragged event: \(event)")
+//        super.mouseDragged(with: event)
+//    }
+//    override func mouseUp(with event: NSEvent) {
+//        print("[PopoverGestureContainer] mouseUp event: \(event)")
+//        super.mouseUp(with: event)
+//    }
+//
+//    override func scrollWheel(with event: NSEvent) {
+//        print("[PopoverGestureContainer] scrollWheel event: \(event)")
+//        super.scrollWheel(with: event)
+//    }
+//
+//    override func touchesBegan(with event: NSEvent) {
+//        print("[PopoverGestureContainer] touchesBegan event: \(event)")
+//        super.touchesBegan(with: event)
+//    }
+//    override func touchesEnded(with event: NSEvent) {
+//        print("[PopoverGestureContainer] touchesEnded event: \(event)")
+//        super.touchesEnded(with: event)
+//    }
+//    override func touchesMoved(with event: NSEvent) {
+//        print("[PopoverGestureContainer] touchesMoved event: \(event)")
+//        super.touchesMoved(with: event)
+//    }
+//    override func touchesCancelled(with event: NSEvent) {
+//        print("[PopoverGestureContainer] touchesCancelled event: \(event)")
+//        super.touchesCancelled(with: event)
+//    }
+//
+//    override func mouseEntered(with event: NSEvent) {
+//        print("[PopoverGestureContainer] touchesMoved event: \(event)")
+//
+//    }
+
 
     
-    public override func mouseDown(with event: NSEvent) {
-        // Translate the event location to view coordinates
-        let convertedLocation = self.convertFromBacking(event.locationInWindow)
+    func addTestView(frame: CGRect) {
+        let rect = NSRect(x: frame.minX, y: frame.minY, width: frame.width, height: frame.height)
+        let rectView = NSView(frame: rect)
+        rectView.wantsLayer = true
+        rectView.layer?.backgroundColor = NSColor.green.cgColor
 
-        if let viewBelow = self
-            .superview?
-            .subviews // Find next view below self
-            .lazy
-            .compactMap({ $0.hitTest(convertedLocation) })
-            .first
-        {
-            self.window?.makeFirstResponder(viewBelow)
-        }
-
-        super.mouseDown(with: event)
+        self.addSubview(rectView)
+        /// Ensure the view is laid out so that SwiftUI animations don't stutter.
+        resizeSubviews(withOldSize: self.frame.size)
+        layoutSubtreeIfNeeded()
     }
+    func addTestCircleView(point: CGPoint) {
+        let diameter: CGFloat = 20
+        let rect = CGRect(x: point.x - diameter / 2, y: point.y - diameter / 2, width: diameter, height: diameter)
+        let circleView = NSView(frame: rect)
+        circleView.wantsLayer = true
+        circleView.layer?.backgroundColor = NSColor.red.cgColor
+        circleView.layer?.cornerRadius = diameter / 2
+
+        self.addSubview(circleView)
+        /// Ensure the view is laid out so that SwiftUI animations don't stutter.
+        resizeSubviews(withOldSize: self.frame.size)
+        layoutSubtreeIfNeeded()
+    }
+
     
-    public override func hitTest(_ point: NSPoint) -> NSView? {
-        
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        print("[PopoverGestureContainer] hitTest event: \(point) -- current Popups: \(popoverModel.popovers.count)")
+        print("[PopoverGestureContainer] myFrame: \(frame) myBounds: \(bounds)")
+//        self.addTestCircleView(point: point)
+        DebugHelper.printResponderChain(from: self)
         /// Only loop through the popovers that are in this window.
         let popovers = popoverModel.popovers
 
@@ -96,6 +162,9 @@ class PopoverGestureContainer: NSView {
         /// Loop through the popovers and see if the touch hit it.
         /// `reversed` to start from the most recently presented popovers, working backwards.
         for popover in popovers.reversed() {
+            print("[PopoverGestureContainer] Popover Frame: \(popover.context.frame)")
+//            self.addTestView(frame: popover.context.frame)
+//            self.addTestView(frame: popover.context.frame)
             /// Check it the popover was hit.
             if popover.context.frame.contains(point) {
                 /// Dismiss other popovers if they have `tapOutsideIncludesOtherPopovers` set to true.
@@ -109,6 +178,11 @@ class PopoverGestureContainer: NSView {
                 }
                 
                 /// Receive the touch and block it from going through.
+                print("[PopoverGestureContainer] hitTest A FOUND!")
+//                if let parent = superview {
+//                    return parent.hitTest(point)
+//                }
+//                return nil
                 return super.hitTest(point)
             }
             
@@ -149,6 +223,7 @@ class PopoverGestureContainer: NSView {
             dismissPopoverIfNecessary(popoverFrames: popoverFrames, point: point, popoverToDismiss: popover)
         }
         
+        print("[PopoverGestureContainer] hitTest event: \(point) did not hit any popover")
         
         /// The touch did not hit any popover, so pass it through to the hit testing target.
         return nil
@@ -165,7 +240,58 @@ class PopoverGestureContainer: NSView {
         }
     }
     
+    private var monitor: Any?
+        
+    deinit {
+        // Clean up click recognizer
+        print("[PopupGestureRecognizer] deinit")
+        removeCloseOnOutsideClick()
+    }
     
+    override var isFlipped: Bool {
+        return true
+//        return false
+    }
+    
+    override var acceptsFirstResponder: Bool {
+        return true
+    }
+
+    override var mouseDownCanMoveWindow: Bool {
+        return true
+    }
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
+        print("[PopoverGestureContainer] acceptsFirstMouse event: \(String(describing: event))")
+        return true
+    }
+    
+    /**
+     Creates a monitor for outside clicks. If clicking outside of this view or
+     any views in `ignoringViews`, the view will be hidden.
+     */
+    func addCloseOnOutsideClick(ignoring ignoringViews: [NSView]? = nil) {
+        monitor = NSEvent.addLocalMonitorForEvents(matching: NSEvent.EventTypeMask.leftMouseDown) { (event) -> NSEvent? in
+            print("[PopoverGestureContainer] addCloseOnOutsideClick: myFrame: \(self.frame) locationInWindow: \(event.locationInWindow) isHidden: \(self.isHidden)")
+            let pointViewLocation = self.convert(event.locationInWindow, from: nil)
+            if let view = self.hitTest(pointViewLocation) {
+                print("[PopoverGestureContainer] addCloseOnOutsideClick hittest WITH view\n \(view.frame) acceptsFirstResponder: \(view.acceptsFirstResponder)  -- \(view)")
+                view.mouseDown(with: event)
+                return nil
+
+            } else {
+                return event
+            }
+            
+        }
+    }
+    
+    
+    func removeCloseOnOutsideClick() {
+        if monitor != nil {
+            NSEvent.removeMonitor(monitor!)
+            monitor = nil
+        }
+    }
 
     /// Boilerplate code.
     @available(*, unavailable)
@@ -173,4 +299,15 @@ class PopoverGestureContainer: NSView {
         fatalError("[Popovers] - Create this view programmatically.")
     }
 }
+
+class DebugHelper {
+    static func printResponderChain(from responder: NSResponder?) {
+        var responder = responder
+        while let r = responder {
+            print(r)
+            responder = r.nextResponder
+        }
+    }
+}
+
 #endif

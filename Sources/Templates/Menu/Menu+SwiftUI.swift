@@ -8,6 +8,7 @@
 
 
 import SwiftUI
+import SwiftUIKit
 
 public extension Templates {
     /**
@@ -33,6 +34,12 @@ public extension Templates {
         /// Fade the origin label.
         @State var fadeLabel = false
 
+        
+        @State var labelPressed = false
+        
+        
+        
+        @GestureState var holdDragState: HoldThenDragGestureState = .inactive
         /**
          A built-from-scratch version of the system menu, for SwiftUI.
          */
@@ -48,40 +55,158 @@ public extension Templates {
             self.content = content
             self.label = label
         }
-
+        
+        
         public var body: some View {
+            ScrollViewGestureButton(
+                isPressed: $labelPressed,
+                releaseInsideAction: {
+                    print("releaseInsideAction")
+                },
+                releaseOutsideAction: {
+                    print("releaseOutsideAction")
+
+                },
+                longPressDelay: model.configuration.holdDelay,
+                longPressAction: {
+                    print("longPress")
+
+                },
+                doubleTapAction: {
+                    print("doubleTap")
+                },
+                repeatAction: {
+                    print("repeatAction")
+                },
+                dragStartAction: {
+                    print("dragStartAction: \($0.location)")
+
+                },
+                dragAction: {
+                    print("dragAction: \($0.location)")
+
+                },
+                dragEndAction: {
+                    print("dragEndAction: \($0.location)")
+                },
+                endAction: {
+                    print("endAction: ")
+
+                },
+                label: { isPressed in
+                    menu
+                }
+            )
+//            menu
+        }
+        
+        
+        public var menu: some View {
+            label(fadeLabel)
+                .contentShape(Rectangle())
+
+                .popover(
+                    present: $model.present,
+                    attributes: {
+                        $0.position = .absolute(
+                            originAnchor: model.configuration.originAnchor,
+                            popoverAnchor: model.configuration.popoverAnchor
+                        )
+                        $0.rubberBandingMode = .none
+                        $0.dismissal.excludedFrames = {
+                            []
+                                + model.configuration.excludedFrames()
+                        }
+                        $0.sourceFrameInset = model.configuration.sourceFrameInset
+                        $0.screenEdgePadding = model.configuration.screenEdgePadding
+                    }
+                ) {
+                    MenuView(
+                        model: model,
+                        content: content
+                    )
+                } background: {
+                    model.configuration.backgroundColor
+                }
+        }
+        
+        
+
+        public var oldBody: some View {
+            
+            
             WindowReader { window in
+                let dragGesture = DragGesture(minimumDistance: 10, coordinateSpace: .global)
+                
+                let combinedGesture = LongPressGesture(minimumDuration: model.configuration.holdDelay)
+                    .sequenced(before: dragGesture)
+                    .updating($holdDragState) { value, state, transaction in
+                        switch value {
+                        //long press begins
+                        case .first(true):
+                            state = .pressing
+                            gestureModel.labelPressUUID = UUID()
+                        // Long press confirmed, dragging may begin.
+                        case .second(true, let drag):
+                            #if os(iOS)
+                            if model.configuration.hapticFeedbackEnabled {
+                                let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+                                feedbackGenerator.prepare()
+                                feedbackGenerator.impactOccurred()
+                            }
+                            #endif
+                            withAnimation(model.configuration.labelFadeAnimation) {
+                                fadeLabel = true
+                            }
+                            if !model.present {
+                                model.present = true
+                            }
+                            state = .dragging(translation: drag?.translation ?? .zero)
+                            if let dragExp = drag {
+                                gestureModel.onDragChanged(
+                                    newDragLocation: dragExp.location,
+                                    model: model,
+                                    labelFrame: window.frameTagged(model.id),
+                                    window: window
+                                ) { present in
+                                    model.present = present
+                                } fadeLabel: { fade in
+                                    fadeLabel = fade
+                                }
+                            }
+                            
+                        default:
+                            //dragging ended or long press cancelled
+                            state = .inactive
+                        }
+                    }
+                    .onEnded { value in
+                        guard case .second(true, let drag?) = value else { return }
+                        gestureModel.onDragEnded(
+                            newDragLocation: drag.location,
+                            model: model,
+                            labelFrame: window.frameTagged(model.id),
+                            window: window
+                        ) { present in
+                            model.present = present
+                        } fadeLabel: { fade in
+                            fadeLabel = fade
+                        }
+                        
+                    }
+                
                 label(fadeLabel)
                     .frameTag(model.id)
                     .contentShape(Rectangle())
-                    .simultaneousGesture(
-                        DragGesture(minimumDistance: 0, coordinateSpace: .global)
-                            .onChanged { value in
-
-                                gestureModel.onDragChanged(
-                                    newDragLocation: value.location,
-                                    model: model,
-                                    labelFrame: window.frameTagged(model.id),
-                                    window: window
-                                ) { present in
-                                    model.present = present
-                                } fadeLabel: { fade in
-                                    fadeLabel = fade
-                                }
+                    .simultaneousGesture(TapGesture()
+                        .onEnded {
+                            if model.present {
+                                model.present = false
                             }
-                            .onEnded { value in
-                                gestureModel.onDragEnded(
-                                    newDragLocation: value.location,
-                                    model: model,
-                                    labelFrame: window.frameTagged(model.id),
-                                    window: window
-                                ) { present in
-                                    model.present = present
-                                } fadeLabel: { fade in
-                                    fadeLabel = fade
-                                }
-                            }
+                        }
                     )
+                    .simultaneousGesture(combinedGesture)
+
                     .onValueChange(of: model.present) { _, present in
                         if !present {
                             withAnimation(model.configuration.labelFadeAnimation) {
@@ -129,3 +254,11 @@ public extension Templates {
         }
     }
 }
+
+
+enum HoldThenDragGestureState {
+    case inactive
+    case pressing
+    case dragging(translation: CGSize)
+}
+

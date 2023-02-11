@@ -33,6 +33,10 @@ class PopoverModel: ObservableObject {
      */
     @Published var selectionFrameTags: [AnyHashable: CGRect] = [:]
 
+    init() {
+        print("PopoverModel init")
+    }
+    
     /// Force the container view to update.
     func reload() {
         objectWillChange.send()

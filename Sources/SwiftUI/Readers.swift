@@ -74,7 +74,9 @@ public struct WindowReader<Content: View>: View {
 
     private class WindowHandler: PlatformView {
         var windowViewModel: WindowViewModel
-
+        
+        var settingWindowInProgress: Bool = false
+        
         init(windowViewModel: WindowViewModel) {
             self.windowViewModel = windowViewModel
             super.init(frame: .zero)
@@ -88,18 +90,26 @@ public struct WindowReader<Content: View>: View {
 
         #if os(iOS)
         override func didMoveToWindow() {
+            print("[Popover] Readers WindowHandler didMoveToWindow")
             super.didMoveToWindow()
-
-            DispatchQueue.main.async {
-                /// Set the window.
-                self.windowViewModel.window = self.window
+            
+            if !self.settingWindowInProgress {
+                self.settingWindowInProgress = true
+                DispatchQueue.main.async {
+                    /// Set the window.
+                    self.windowViewModel.window = self.window
+                    print("[Popover] Readers WindowHandler didMoveToWindow set windowViewModel")
+                    self.settingWindowInProgress = false
+                }
             }
         }
         #elseif os(macOS)
         override func viewDidMoveToWindow() {
+//            print("[Popover] Readers WindowHandler viewDidMoveToWindow")
             super.viewDidMoveToWindow()
             DispatchQueue.main.async {
                 self.windowViewModel.window = self.window
+                print("[Popover] Readers WindowHandler viewDidMoveToWindow set windowViewModel")
             }
         }
         #endif

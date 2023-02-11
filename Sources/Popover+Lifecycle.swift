@@ -67,11 +67,13 @@ public extension Popover {
             window.addSubview(container)
         }
 
+        #if os(iOS)
         if attributes.source == .stayAboveWindows {
             context.windowSublayersKeyValueObservationToken = window.layer.observe(\.sublayers) { _, _ in
                 window.bringSubviewToFront(container)
             }
         }
+        #endif
 
         /// Hang on to the container for future dismiss/replace actions.
         context.presentedPopoverContainer = container
@@ -83,6 +85,7 @@ public extension Popover {
      - parameter transaction: An optional transaction that can be applied for the dismissal animation.
      */
     func dismiss(transaction: Transaction? = nil) {
+        print("[Popover+Lifecycle] dismiss")
         guard let container = context.presentedPopoverContainer else { return }
 
         let model = container.popoverModel
@@ -221,3 +224,4 @@ extension UniversalWindow {
 
 
 #endif
+

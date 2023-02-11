@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "swiftuikit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/symbiose-technologies/SwiftUIKit.git",
+      "state" : {
+        "branch" : "symbiose",
+        "revision" : "f4080007b7c85dc92a6b86dc8d31929ab3ba6d7c"
+      }
+    }
+  ],
+  "version" : 2
+}

@@ -47,8 +47,10 @@ class WindowPopoverModels {
         pruneDeallocatedWindowModels()
 
         if let existingModel = existingPopoverModel(for: window) {
+//            print("[PopoverWindows] existingModel")
             return existingModel
         } else {
+//            print("[PopoverWindows] prepareAndRetainModel for window")
             return prepareAndRetainModel(for: window)
         }
     }
@@ -98,17 +100,30 @@ extension UniversalResponder {
      */
     var popoverModel: PopoverModel {
         /// If we're a view, continue to walk up the responder chain until we hit the root view.
-        if let view = self as? PlatformView, let superview = view.superview {
-            return superview.popoverModel
+        if let view = self as? PlatformView {
+            if let superview = view.superview {
+                print("[Popoverwindows] have superview")
+                return superview.popoverModel
+            } else {
+                #if os(macOS)
+                print("[Popoverwindows] no superview as NSView")
+                if let superWindow = view.window {
+                    print("[Popoverwindows] no superview as NSView -- passing window with safeAreaLayoutFrame \(superWindow.safeAreaLayoutFrame)")
+                    return superWindow.popoverModel
+                }
+                #endif
+            }
         }
 
         /// If we're a window, we define the scoping for the model - access it.
         if let window = self as? UniversalWindow {
+//            print("[Popoverwindows] as UniversalWindow ")
             return WindowPopoverModels.shared.popoverModel(for: window)
         }
 
         /// If we're a view controller, begin walking the responder chain up to the root view.
         if let viewController = self as? PlatformViewController {
+            print("[Popoverwindows] as PlatformVC ")
             return viewController.view.popoverModel
         }
 
