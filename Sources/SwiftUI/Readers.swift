@@ -106,11 +106,20 @@ public struct WindowReader<Content: View>: View {
         #elseif os(macOS)
         override func viewDidMoveToWindow() {
 //            print("[Popover] Readers WindowHandler viewDidMoveToWindow")
+                        
             super.viewDidMoveToWindow()
-            DispatchQueue.main.async {
-                self.windowViewModel.window = self.window
-                print("[Popover] Readers WindowHandler viewDidMoveToWindow set windowViewModel")
-            }
+//            DispatchQueue.main.async {
+//                
+//                if !self.settingWindowInProgress {
+//                    self.settingWindowInProgress = true
+//                    self.windowViewModel.window = self.window
+//                    print("[Popover] Readers WindowHandler viewDidMoveToWindow set windowViewModel")
+//                    self.settingWindowInProgress = false
+//                }
+//                
+//            }
+            
+            
         }
         #endif
         

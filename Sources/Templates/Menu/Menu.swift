@@ -360,6 +360,7 @@ extension View {
             /// Handle gestures that started on the popover.
             DragGesture(minimumDistance: 0, coordinateSpace: .global)
                 .onChanged { value in
+//                    print("[Menu] .menuGesture")
                     model.hoveringItemID = model.getItemID(from: value.location)
 
                     /// Rubber-band the menu.

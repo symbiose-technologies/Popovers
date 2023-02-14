@@ -25,6 +25,84 @@ extension Templates {
         /// The current position of the user's finger.
         var dragLocation: CGPoint?
 
+        
+        func dragChanged(newDragLocation: CGPoint,
+                           model: MenuModel
+        ) {
+            dragLocation = newDragLocation
+            let configuration = model.configuration
+            /// Highlight the button that the user's finger is over.
+            model.hoveringItemID = model.getItemID(from: newDragLocation)
+
+            /// Rubber-band the menu.
+            withAnimation {
+                if let distance = model.getDistanceFromMenu(from: newDragLocation) {
+                    if configuration.scaleRange.contains(distance) {
+                        let percentage = (distance - configuration.scaleRange.lowerBound) / (configuration.scaleRange.upperBound - configuration.scaleRange.lowerBound)
+                        let scale = 1 - (1 - configuration.minimumScale) * percentage
+                        model.scale = scale
+                    } else if distance < configuration.scaleRange.lowerBound {
+                        model.scale = 1
+                    } else {
+                        model.scale = configuration.minimumScale
+                    }
+                }
+            }
+            
+//            if !model.present { //menu is not presented
+//
+//
+//            } else { //menu is presented
+//                /// Highlight the button that the user's finger is over.
+//                model.hoveringItemID = model.getItemID(from: newDragLocation)
+//
+//                /// Rubber-band the menu.
+//                withAnimation {
+//                    if let distance = model.getDistanceFromMenu(from: newDragLocation) {
+//                        if configuration.scaleRange.contains(distance) {
+//                            let percentage = (distance - configuration.scaleRange.lowerBound) / (configuration.scaleRange.upperBound - configuration.scaleRange.lowerBound)
+//                            let scale = 1 - (1 - configuration.minimumScale) * percentage
+//                            model.scale = scale
+//                        } else if distance < configuration.scaleRange.lowerBound {
+//                            model.scale = 1
+//                        } else {
+//                            model.scale = configuration.minimumScale
+//                        }
+//                    }
+//                }
+//            }
+        }
+        
+        
+        func dragEnded(newDragLocation: CGPoint,
+                       model: MenuModel) {
+            dragLocation = newDragLocation
+
+            withAnimation {
+                model.scale = 1
+            }
+            
+            if !model.present {
+                //donothing
+                
+            } else { //menu is showing
+                
+                let selectedItemID = model.getItemID(from: newDragLocation)
+                model.selectedItemID = selectedItemID
+                model.hoveringItemID = nil
+
+                /// The user lifted their finger outside an item target.
+                if selectedItemID == nil {
+                    model.configuration.onLiftWithoutSelecting?()
+                } else if model.configuration.dismissAfterSelecting {
+                    /// Dismiss if the user lifted up their finger on an item.
+                    model.present = false
+                }
+            }
+            
+        }
+        
+        
         /// Process the drag gesture, updating the menu to match.
         func onDragChanged(
             newDragLocation: CGPoint,

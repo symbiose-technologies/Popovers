@@ -70,8 +70,8 @@ class PopoverGestureContainer: NSView {
         addSubview(hostingController.view)
 
         /// Ensure the view is laid out so that SwiftUI animations don't stutter.
-        resizeSubviews(withOldSize: self.frame.size)
-        layoutSubtreeIfNeeded()
+//        resizeSubviews(withOldSize: self.frame.size)
+//        layoutSubtreeIfNeeded()
 
         /// Let the presenter know that its window is available.
         onMovedToWindow?()

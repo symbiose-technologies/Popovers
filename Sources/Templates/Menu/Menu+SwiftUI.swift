@@ -57,47 +57,18 @@ public extension Templates {
         }
         
         
+        func longPressTriggered() {
+            model.present = true
+//            withAnimation(model.configuration.labelFadeAnimation) {
+//                fadeLabel = true
+//            }
+        }
+        
         public var body: some View {
-            ScrollViewGestureButton(
-                isPressed: $labelPressed,
-                releaseInsideAction: {
-                    print("releaseInsideAction")
-                },
-                releaseOutsideAction: {
-                    print("releaseOutsideAction")
-
-                },
-                longPressDelay: model.configuration.holdDelay,
-                longPressAction: {
-                    print("longPress")
-
-                },
-                doubleTapAction: {
-                    print("doubleTap")
-                },
-                repeatAction: {
-                    print("repeatAction")
-                },
-                dragStartAction: {
-                    print("dragStartAction: \($0.location)")
-
-                },
-                dragAction: {
-                    print("dragAction: \($0.location)")
-
-                },
-                dragEndAction: {
-                    print("dragEndAction: \($0.location)")
-                },
-                endAction: {
-                    print("endAction: ")
-
-                },
-                label: { isPressed in
-                    menu
+            menu
+                .onLongPressGesture(minimumDuration: 0.2) {
+                    self.longPressTriggered()
                 }
-            )
-//            menu
         }
         
         
@@ -131,12 +102,141 @@ public extension Templates {
         }
         
         
+        //if we NEED the drag gesture, we can use this scrollviewgesturebutton wrapper but it will prevent events from being passed to the wrapped view such as tapping a link, etc.
+        public var bodyInScrollTest: some View {
+            
+                ScrollViewGestureButton(
+                    isPressed: $labelPressed,
+                    releaseInsideAction: {
+                        print("releaseInsideAction")
+                    },
+                    releaseOutsideAction: {
+                        print("releaseOutsideAction")
+                    },
+                    longPressDelay: model.configuration.holdDelay,
+                    longPressAction: {
+                        print("longPress")
+                        self.longPressTriggered()
+                    },
+                    dragStartAction: {
+                        print("dragStartAction: \($0.location)")
+    
+                    },
+                    dragAction: {
+                        print("dragAction: \($0.location)")
+                        gestureModel.dragChanged(newDragLocation: $0.location, model: model)
+                    },
+                    dragEndAction: {
+                        print("dragEndAction: \($0.location)")
+                        gestureModel.dragEnded(newDragLocation: $0.location, model: model)
+    
+                    },
+                    label: { isPressed in
+                        menu
+                    }
+                )
+        }
+        
+        
+        public var bodyTest: some View {
+            let dragGesture = DragGesture(minimumDistance: 0, coordinateSpace: .global)
+            
+            let combinedGesture = LongPressGesture(minimumDuration: model.configuration.holdDelay)
+                .sequenced(before: dragGesture)
+                .updating($holdDragState) { value, state, transaction in
+                    switch value {
+                    //long press begins
+                    case .first(true):
+                        
+                        state = .pressing
+                        gestureModel.labelPressUUID = UUID()
+                    // Long press confirmed, dragging may begin.
+                    case .second(true, let drag):
+                        #if os(iOS)
+                        if model.configuration.hapticFeedbackEnabled {
+                            let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+                            feedbackGenerator.prepare()
+                            feedbackGenerator.impactOccurred()
+                        }
+                        #endif
+                        
+                        state = .dragging(translation: drag?.translation ?? .zero)
+                        if let dragExp = drag {
+                            gestureModel.dragChanged(newDragLocation: dragExp.location, model: model)
+                        }
+                        
+                    default:
+                        //dragging ended or long press cancelled
+                        state = .inactive
+                    }
+                }
+                .onEnded { value in
+                    guard case .second(true, let drag?) = value else { return }
+                    gestureModel.dragEnded(newDragLocation: drag.location, model: model)
+                }
+            
+            return label(fadeLabel)
+                .frameTag(model.id)
+                .contentShape(Rectangle())
+                    .simultaneousGesture(TapGesture()
+                        .onEnded {
+                            if model.present {
+                                model.present = false
+                            }
+                        }
+                    )
+                .simultaneousGesture(combinedGesture)
 
-        public var oldBody: some View {
+                .onValueChange(of: model.present) { _, present in
+                    if !present {
+                        withAnimation(model.configuration.labelFadeAnimation) {
+                            fadeLabel = false
+                            model.selectedItemID = nil
+                            model.hoveringItemID = nil
+                        }
+                        overridePresent = present
+                    }
+                }
+                .onValueChange(of: overridePresent) { _, present in
+                    if present != model.present {
+                        model.present = present
+                        withAnimation(model.configuration.labelFadeAnimation) {
+                            fadeLabel = present
+                        }
+                    }
+                }
+                .popover(
+                    present: $model.present,
+                    attributes: {
+                        $0.position = .absolute(
+                            originAnchor: model.configuration.originAnchor,
+                            popoverAnchor: model.configuration.popoverAnchor
+                        )
+                        $0.rubberBandingMode = .none
+                        $0.dismissal.excludedFrames = {
+                            [
+                            ]
+                                + model.configuration.excludedFrames()
+                        }
+                        $0.sourceFrameInset = model.configuration.sourceFrameInset
+                        $0.screenEdgePadding = model.configuration.screenEdgePadding
+                    }
+                ) {
+                    MenuView(
+                        model: model,
+                        content: content
+                    )
+                } background: {
+                    model.configuration.backgroundColor
+                }
+        }
+        
+
+        public var bodyOld: some View {
             
             
             WindowReader { window in
-                let dragGesture = DragGesture(minimumDistance: 10, coordinateSpace: .global)
+                let dragGesture = DragGesture(minimumDistance: 0, coordinateSpace: .global)
                 
                 let combinedGesture = LongPressGesture(minimumDuration: model.configuration.holdDelay)
                     .sequenced(before: dragGesture)
@@ -144,6 +244,7 @@ public extension Templates {
                         switch value {
                         //long press begins
                         case .first(true):
+                            
                             state = .pressing
                             gestureModel.labelPressUUID = UUID()
                         // Long press confirmed, dragging may begin.
@@ -198,13 +299,13 @@ public extension Templates {
                 label(fadeLabel)
                     .frameTag(model.id)
                     .contentShape(Rectangle())
-                    .simultaneousGesture(TapGesture()
-                        .onEnded {
-                            if model.present {
-                                model.present = false
-                            }
-                        }
-                    )
+//                    .simultaneousGesture(TapGesture()
+//                        .onEnded {
+//                            if model.present {
+//                                model.present = false
+//                            }
+//                        }
+//                    )
                     .simultaneousGesture(combinedGesture)
 
                     .onValueChange(of: model.present) { _, present in
