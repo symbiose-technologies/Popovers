@@ -18,10 +18,10 @@ import SwiftUI
 
 #if canImport(UIKit)
 import UIKit
-public typealias PlatformColor = UIColor
+internal typealias PlatformColor = UIColor
 #elseif canImport(AppKit)
 import AppKit
-public typealias PlatformColor = NSColor
+internal typealias PlatformColor = NSColor
 #endif
 
 #if !os(watchOS) // All the methods below are not availalbe for WatchOS at the time of writing
@@ -32,7 +32,7 @@ public typealias PlatformColor = NSColor
 // iOS      | https://developer.apple.com/documentation/uikit/uicolor/standard_colors
 // OSX      | https://developer.apple.com/documentation/appkit/nscolor/standard_colors
 @available(iOS 13.0, macOS 10.15, *)
-public extension Color {
+internal extension Color {
     /// A blue color that automatically adapts to the current trait environment.
     static var systemBlue: Color { Color(PlatformColor.systemBlue) }
     /// A brown color that automatically adapts to the current trait environment.
@@ -68,14 +68,14 @@ public extension Color {
 // iOS      | https://developer.apple.com/documentation/uikit/uicolor/standard_colors
 // OSX      | https://developer.apple.com/documentation/appkit/nscolor/standard_colors
 @available(iOS 13.0, OSX 10.15, *)
-public extension Color {
+internal extension Color {
     /// The standard base gray color that adapts to the environment.
     static var systemGray: Color { Color(PlatformColor.systemGray) }
 }
 
 #if canImport(UIKit) && !os(tvOS)
 @available(iOS 13.0, *)
-public extension Color {
+internal extension Color {
     /// A second-level shade of gray that adapts to the environment.
     static var systemGray2: Color { Color(PlatformColor.systemGray2) }
     /// A third-level shade of gray that adapts to the environment.
@@ -96,7 +96,7 @@ public extension Color {
 // iOS      | https://developer.apple.com/documentation/uikit/uicolor/standard_colors
 // OSX      | https://developer.apple.com/documentation/appkit/nscolor/standard_colors
 @available(iOS 13.0, OSX 10.15, *)
-public extension Color {
+internal extension Color {
     /// A color object with a grayscale value of 1/3 and an alpha value of 1.0.
     static var darkGray: Color { Color(PlatformColor.darkGray) }
     /// A color object with a grayscale value of 2/3 and an alpha value of 1.0.
@@ -112,8 +112,18 @@ public extension Color {
 // iOS      | https://developer.apple.com/documentation/uikit/uicolor/ui_element_colors
 // OSX      | https://developer.apple.com/documentation/appkit/nscolor/ui_element_colors
 #if canImport(UIKit)
+
 @available(iOS 13.0, *)
-public extension Color {
+public extension Color  {
+    /// The color for the main background of your interface.
+        @available(tvOS, unavailable)
+        static var popoverSystemBackground: Color { Color(PlatformColor.systemBackground) }
+}
+
+
+
+@available(iOS 13.0, *)
+internal extension Color {
     // MARK: Label Colors
     /// The color for text labels that contain primary content.
     static var label: Color { Color(PlatformColor.label) }
@@ -145,9 +155,7 @@ public extension Color {
     // MARK: Standard Content Background Colors
     /// Use these colors for standard table views and designs that have a white primary background in a light environment.
     
-    /// The color for the main background of your interface.
-    @available(tvOS, unavailable)
-    static var systemBackground: Color { Color(PlatformColor.systemBackground) }
+    
     /// The color for content layered on top of the main background.
     @available(tvOS, unavailable)
     static var secondarySystemBackground: Color { Color(PlatformColor.secondarySystemBackground) }
@@ -187,9 +195,13 @@ public extension Color {
     static var lightText: Color { Color(PlatformColor.lightText) }
 }
 #elseif canImport(AppKit)
-
 @available(OSX 10.15, *)
 public extension Color {
+    static var popoverSystemBackground: Color { Color(PlatformColor.windowBackgroundColor) }
+}
+
+@available(OSX 10.15, *)
+internal extension Color {
     // MARK: Label Colors
     /// The primary color to use for text labels.
     static var label: Color { Color(PlatformColor.labelColor) }
@@ -263,7 +275,6 @@ public extension Color {
     // MARK: Window Colors
     /// The color to use for the window background.
     static var windowBackground: Color { Color(PlatformColor.windowBackgroundColor) }
-    static var systemBackground: Color { Color(PlatformColor.windowBackgroundColor) }
     /// The color to use for text in a window's frame.
     static var windowFrameText: Color { Color(PlatformColor.windowFrameTextColor) }
     /// The color to use in the area beneath your window's views.

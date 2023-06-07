@@ -7,12 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3C73924E27AF8496006A56E7 /* UIKitMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C73924D27AF8496006A56E7 /* UIKitMenuView.swift */; };
 		3C8521B627ACADB30020ECB8 /* InsideNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8521B527ACADB30020ECB8 /* InsideNavigationView.swift */; };
 		3CA34FAC279533E300AC36DF /* AccessibilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA34FAB279533E300AC36DF /* AccessibilityView.swift */; };
 		3CBD875E27755E45005BBA48 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD875D27755E45005BBA48 /* App.swift */; };
 		3CBD876527755E50005BBA48 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD875F27755E50005BBA48 /* ContentView.swift */; };
-		3CBD876627755E50005BBA48 /* UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD876027755E50005BBA48 /* UIKit.swift */; };
 		3CBD876727755E50005BBA48 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD876127755E50005BBA48 /* Utilities.swift */; };
 		3CBD876827755E50005BBA48 /* NavigationToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD876227755E50005BBA48 /* NavigationToolbar.swift */; };
 		3CBD876927755E50005BBA48 /* Playground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD876327755E50005BBA48 /* Playground.swift */; };
@@ -38,9 +36,6 @@
 		3CBD879427755E5B005BBA48 /* StandardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD878C27755E5B005BBA48 /* StandardView.swift */; };
 		3CBD879527755E5B005BBA48 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD878D27755E5B005BBA48 /* TutorialView.swift */; };
 		3CBD879627755E5B005BBA48 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD878E27755E5B005BBA48 /* MenuView.swift */; };
-		3CBD879B27755E5F005BBA48 /* ReplaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD879827755E5F005BBA48 /* ReplaceView.swift */; };
-		3CBD879C27755E5F005BBA48 /* DismissView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD879927755E5F005BBA48 /* DismissView.swift */; };
-		3CBD879D27755E5F005BBA48 /* PresentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD879A27755E5F005BBA48 /* PresentView.swift */; };
 		3CBD87AA27756277005BBA48 /* Popovers in Frameworks */ = {isa = PBXBuildFile; productRef = 3CBD87A927756277005BBA48 /* Popovers */; };
 		3CCA6CED27AF2287002D0091 /* Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCA6CEC27AF2287002D0091 /* Testing.swift */; };
 		3CCA6CEF27AF24A0002D0091 /* MenuComparisonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCA6CEE27AF249F002D0091 /* MenuComparisonView.swift */; };
@@ -50,14 +45,11 @@
 
 /* Begin PBXFileReference section */
 		3C5DB8B7294530EF00017ADE /* Popovers */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Popovers; path = ..; sourceTree = "<group>"; };
-		3C6C745127822EE600E039F0 /* Popovers */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Popovers; path = ../..; sourceTree = "<group>"; };
-		3C73924D27AF8496006A56E7 /* UIKitMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitMenuView.swift; sourceTree = "<group>"; };
 		3C8521B527ACADB30020ECB8 /* InsideNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsideNavigationView.swift; sourceTree = "<group>"; };
 		3CA34FAB279533E300AC36DF /* AccessibilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityView.swift; sourceTree = "<group>"; };
 		3CBD874C27755E19005BBA48 /* PopoversExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PopoversExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CBD875D27755E45005BBA48 /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		3CBD875F27755E50005BBA48 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		3CBD876027755E50005BBA48 /* UIKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKit.swift; sourceTree = "<group>"; };
 		3CBD876127755E50005BBA48 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		3CBD876227755E50005BBA48 /* NavigationToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationToolbar.swift; sourceTree = "<group>"; };
 		3CBD876327755E50005BBA48 /* Playground.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Playground.swift; sourceTree = "<group>"; };
@@ -83,9 +75,6 @@
 		3CBD878C27755E5B005BBA48 /* StandardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardView.swift; sourceTree = "<group>"; };
 		3CBD878D27755E5B005BBA48 /* TutorialView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		3CBD878E27755E5B005BBA48 /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
-		3CBD879827755E5F005BBA48 /* ReplaceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReplaceView.swift; sourceTree = "<group>"; };
-		3CBD879927755E5F005BBA48 /* DismissView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DismissView.swift; sourceTree = "<group>"; };
-		3CBD879A27755E5F005BBA48 /* PresentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentView.swift; sourceTree = "<group>"; };
 		3CCA6CEC27AF2287002D0091 /* Testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Testing.swift; sourceTree = "<group>"; };
 		3CCA6CEE27AF249F002D0091 /* MenuComparisonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuComparisonView.swift; sourceTree = "<group>"; };
 		CA04D304277B3488004E8FF6 /* PresentWithinSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentWithinSheetView.swift; sourceTree = "<group>"; };
@@ -104,17 +93,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3C5DB8B82945335B00017ADE /* UIKit */ = {
-			isa = PBXGroup;
-			children = (
-				3CBD876027755E50005BBA48 /* UIKit.swift */,
-				3CBD879A27755E5F005BBA48 /* PresentView.swift */,
-				3CBD879827755E5F005BBA48 /* ReplaceView.swift */,
-				3CBD879927755E5F005BBA48 /* DismissView.swift */,
-			);
-			path = UIKit;
-			sourceTree = "<group>";
-		};
 		3C5DB8B9294533B500017ADE /* Misc */ = {
 			isa = PBXGroup;
 			children = (
@@ -128,7 +106,6 @@
 		3CBD874327755E19005BBA48 = {
 			isa = PBXGroup;
 			children = (
-				3C6C745127822EE600E039F0 /* Popovers */,
 				3C5DB8B7294530EF00017ADE /* Popovers */,
 				3CBD874E27755E19005BBA48 /* PopoversExample */,
 				3CBD874D27755E19005BBA48 /* Products */,
@@ -150,7 +127,6 @@
 				3CBD875F27755E50005BBA48 /* ContentView.swift */,
 				3CBD876D27755E57005BBA48 /* Playground */,
 				3CBD878627755E5B005BBA48 /* Showroom */,
-				3C5DB8B82945335B00017ADE /* UIKit */,
 				3CCA6CEB27AF2278002D0091 /* Testing */,
 				3C5DB8B9294533B500017ADE /* Misc */,
 			);
@@ -201,7 +177,6 @@
 				3CCA6CEC27AF2287002D0091 /* Testing.swift */,
 				3C8521B527ACADB30020ECB8 /* InsideNavigationView.swift */,
 				3CCA6CEE27AF249F002D0091 /* MenuComparisonView.swift */,
-				3C73924D27AF8496006A56E7 /* UIKitMenuView.swift */,
 				CA04D304277B3488004E8FF6 /* PresentWithinSheetView.swift */,
 			);
 			path = Testing;
@@ -295,15 +270,12 @@
 				3CBD876927755E50005BBA48 /* Playground.swift in Sources */,
 				3CBD879427755E5B005BBA48 /* StandardView.swift in Sources */,
 				3CBD878327755E57005BBA48 /* LifecycleView.swift in Sources */,
-				3CBD879B27755E5F005BBA48 /* ReplaceView.swift in Sources */,
 				3CBD878227755E57005BBA48 /* AbsolutePositioningView.swift in Sources */,
-				3CBD879C27755E5F005BBA48 /* DismissView.swift in Sources */,
 				CA6F682D2786F70700DF97E7 /* FormView.swift in Sources */,
 				3CBD878527755E57005BBA48 /* FrameTaggedView.swift in Sources */,
 				CA04D305277B3488004E8FF6 /* PresentWithinSheetView.swift in Sources */,
 				3CBD877D27755E57005BBA48 /* BasicView.swift in Sources */,
 				3CBD879527755E5B005BBA48 /* TutorialView.swift in Sources */,
-				3CBD876627755E50005BBA48 /* UIKit.swift in Sources */,
 				3CBD877E27755E57005BBA48 /* BackgroundView.swift in Sources */,
 				3CBD876A27755E50005BBA48 /* Showroom.swift in Sources */,
 				3CCA6CEF27AF24A0002D0091 /* MenuComparisonView.swift in Sources */,
@@ -317,9 +289,7 @@
 				3CBD878127755E57005BBA48 /* DismissalView2.swift in Sources */,
 				3CBD875E27755E45005BBA48 /* App.swift in Sources */,
 				3C8521B627ACADB30020ECB8 /* InsideNavigationView.swift in Sources */,
-				3C73924E27AF8496006A56E7 /* UIKitMenuView.swift in Sources */,
 				3CBD878427755E57005BBA48 /* DismissalView1.swift in Sources */,
-				3CBD879D27755E5F005BBA48 /* PresentView.swift in Sources */,
 				3CBD877C27755E57005BBA48 /* SelectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -452,7 +422,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = YA533DMD5J;
+				DEVELOPMENT_TEAM = 3U588QPJ72;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -466,7 +436,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.aheze.PopoversExample;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aheze.PopoversExample-sym";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -484,7 +454,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = YA533DMD5J;
+				DEVELOPMENT_TEAM = 3U588QPJ72;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -498,7 +468,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.aheze.PopoversExample;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aheze.PopoversExample-sym";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

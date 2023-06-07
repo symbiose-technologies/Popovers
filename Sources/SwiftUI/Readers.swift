@@ -93,15 +93,21 @@ public struct WindowReader<Content: View>: View {
             print("[Popover] Readers WindowHandler didMoveToWindow")
             super.didMoveToWindow()
             
-            if !self.settingWindowInProgress {
-                self.settingWindowInProgress = true
-                DispatchQueue.main.async {
-                    /// Set the window.
-                    self.windowViewModel.window = self.window
-                    print("[Popover] Readers WindowHandler didMoveToWindow set windowViewModel")
-                    self.settingWindowInProgress = false
-                }
+            
+            DispatchQueue.main.async {
+                /// Set the window.
+                self.windowViewModel.window = self.window
             }
+            
+//            if !self.settingWindowInProgress {
+//                self.settingWindowInProgress = true
+//                DispatchQueue.main.async {
+//                    /// Set the window.
+//                    self.windowViewModel.window = self.window
+//                    print("[Popover] Readers WindowHandler didMoveToWindow set windowViewModel")
+//                    self.settingWindowInProgress = false
+//                }
+//            }
         }
         #elseif os(macOS)
         override func viewDidMoveToWindow() {
@@ -125,6 +131,7 @@ public struct WindowReader<Content: View>: View {
         
     }
 }
+
 
 class WindowViewModel: ObservableObject {
     @Published var window: UniversalWindow?

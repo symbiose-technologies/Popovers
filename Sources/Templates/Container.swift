@@ -21,7 +21,7 @@ public extension Templates {
         public var cornerRadius = CGFloat(12)
 
         /// The container's background/fill color.
-        public var backgroundColor = Color.systemBackground
+        public var backgroundColor = Color.popoverSystemBackground
 
         /// The shadow around the content view.
         public var shadow: Shadow? = .system
@@ -43,7 +43,7 @@ public extension Templates {
         public init(
             arrowSide: Templates.ArrowSide? = nil,
             cornerRadius: CGFloat = CGFloat(12),
-            backgroundColor: Color = Color.systemBackground,
+            backgroundColor: Color = Color.popoverSystemBackground,
             shadow: Shadow? = .system,
             padding: CGFloat = CGFloat(16),
             @ViewBuilder view: () -> Content
