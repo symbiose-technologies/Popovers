@@ -18,7 +18,7 @@ public extension UniversalWindow {
     }
     
     var safeAreaLayoutFrame: CGRect {
-        print("[ios] safeAreaLayoutFrame: \(safeAreaLayoutGuide.layoutFrame)")
+//        print("[ios] safeAreaLayoutFrame: \(safeAreaLayoutGuide.layoutFrame)")
         return safeAreaLayoutGuide.layoutFrame
     }
 }

@@ -90,7 +90,7 @@ public struct WindowReader<Content: View>: View {
 
         #if os(iOS)
         override func didMoveToWindow() {
-            print("[Popover] Readers WindowHandler didMoveToWindow")
+//            print("[Popover] Readers WindowHandler didMoveToWindow")
             super.didMoveToWindow()
             
             
