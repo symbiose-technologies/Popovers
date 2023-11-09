@@ -49,7 +49,7 @@ public extension Templates {
             @ViewBuilder label: @escaping (Bool) -> Label
         ) {
             _overridePresent = present
-            _model = StateObject(wrappedValue: MenuModel(buildConfiguration: buildConfiguration))
+            _model = StateObject(wrappedValue: MenuModel(buildConfiguration: buildConfiguration, startsPresented: present.wrappedValue))
             _gestureModel = StateObject(wrappedValue: MenuGestureModel())
             self.content = content
             self.label = label

@@ -26,6 +26,8 @@ extension Templates {
         /// Whether to show the popover or not.
         @Published var present = false
 
+        var startsPresented: Bool = false
+        
         /// The popover's scale (for rubber banding).
         @Published var scale = CGFloat(1)
 
@@ -41,8 +43,11 @@ extension Templates {
         /// The frame of the menu in global coordinates.
         @Published var menuFrame = CGRect.zero
 
-        init(buildConfiguration: @escaping ((inout MenuConfiguration) -> Void) = { _ in }) {
+        init(buildConfiguration: @escaping ((inout MenuConfiguration) -> Void) = { _ in },
+             startsPresented: Bool = false) {
             self.buildConfiguration = buildConfiguration
+            self.present = startsPresented
+            self.startsPresented = startsPresented
         }
 
         /// Get the menu button ID that intersects the drag gesture's touch location.

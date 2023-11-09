@@ -36,6 +36,7 @@ public extension Templates {
         public var dismissAfterSelecting = true /// Dismiss the menu after selecting an item.
         public var onLiftWithoutSelecting: (() -> Void)? = {} /// Called when the user lifts their finger either outside the menu, or in between menu items.
 
+        
         /// Create the default attributes for the popover menu.
         public init(
             hapticFeedbackEnabled: Bool = true,
