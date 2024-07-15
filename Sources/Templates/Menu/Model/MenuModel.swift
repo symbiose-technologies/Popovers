@@ -11,7 +11,9 @@ import SwiftUI
 
 extension Templates {
     typealias MenuItemID = UUID
-    class MenuModel: ObservableObject {
+    
+    @Observable
+    class MenuModel {
         var buildConfiguration: ((inout MenuConfiguration) -> Void) = { _ in }
 
         var configuration: MenuConfiguration {
@@ -21,27 +23,27 @@ extension Templates {
         }
 
         /// A unique ID for the menu (to support multiple menus in the same screen).
-        @Published var id = UUID()
+         var id = UUID()
 
         /// Whether to show the popover or not.
-        @Published var present = false
+         var present = false
 
         var startsPresented: Bool = false
         
         /// The popover's scale (for rubber banding).
-        @Published var scale = CGFloat(1)
+         var scale = CGFloat(1)
 
         /// The index of the menu button that the user's finger hovers on.
-        @Published var hoveringItemID: MenuItemID?
+         var hoveringItemID: MenuItemID?
 
         /// The selected menu button if it exists.
-        @Published var selectedItemID: MenuItemID?
+         var selectedItemID: MenuItemID?
 
         /// The frames of the menu buttons, relative to the window.
-        @Published var frames = [MenuItemID: CGRect]()
+         var frames = [MenuItemID: CGRect]()
 
         /// The frame of the menu in global coordinates.
-        @Published var menuFrame = CGRect.zero
+         var menuFrame = CGRect.zero
 
         init(buildConfiguration: @escaping ((inout MenuConfiguration) -> Void) = { _ in },
              startsPresented: Bool = false) {

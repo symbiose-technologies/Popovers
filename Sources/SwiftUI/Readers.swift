@@ -24,8 +24,10 @@ public struct PopoverReader<Content: View>: View {
     @ViewBuilder var view: (Popover.Context) -> Content
 
     /// The popover's context (passed down from `Popover.swift`).
-    @EnvironmentObject var context: Popover.Context
+    @Environment(Popover.Context.self) var context: Popover.Context
+//    @EnvironmentObject var context: Popover.Context
 
+    
     public var body: some View {
         /// Pass the context down.
         view(context)
@@ -45,8 +47,10 @@ public struct WindowReader<Content: View>: View {
     public let view: (UniversalWindow?) -> Content
 
     /// The read window.
-    @StateObject var windowViewModel = WindowViewModel()
+//    @StateObject var windowViewModel = WindowViewModel()
 
+    @State var windowViewModel = WindowViewModel()
+    
     /// Reads the `UIWindow` that hosts some SwiftUI content.
     public init(@ViewBuilder view: @escaping (UniversalWindow?) -> Content) {
         self.view = view
@@ -63,8 +67,8 @@ public struct WindowReader<Content: View>: View {
 
     /// A wrapper view to read the parent window.
     private struct WindowHandlerRepresentable: PlatformAgnosticViewRepresentable {
-        @ObservedObject var windowViewModel: WindowViewModel
-
+//        @ObservedObject var windowViewModel: WindowViewModel
+        var windowViewModel: WindowViewModel
         func makePlatformView(context _: Context) -> WindowHandler {
             return WindowHandler(windowViewModel: self.windowViewModel)
         }
@@ -115,14 +119,14 @@ public struct WindowReader<Content: View>: View {
                         
             super.viewDidMoveToWindow()
 //            DispatchQueue.main.async {
-//                
+//
 //                if !self.settingWindowInProgress {
 //                    self.settingWindowInProgress = true
 //                    self.windowViewModel.window = self.window
 //                    print("[Popover] Readers WindowHandler viewDidMoveToWindow set windowViewModel")
 //                    self.settingWindowInProgress = false
 //                }
-//                
+//
 //            }
             
             
@@ -133,7 +137,15 @@ public struct WindowReader<Content: View>: View {
 }
 
 
-class WindowViewModel: ObservableObject {
-    @Published var window: UniversalWindow?
+//class WindowViewModel: ObservableObject {
+//    @Published var window: UniversalWindow?
+//}
+
+
+
+
+@Observable
+class WindowViewModel {
+    var window: UniversalWindow?
 }
 

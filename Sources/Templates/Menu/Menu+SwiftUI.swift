@@ -16,10 +16,10 @@ public extension Templates {
     @available(iOS 14.0, *)
     struct Menu<Label: View, Content: View>: View {
         /// View model for the menu buttons. Should be `StateObject` to avoid getting recreated by SwiftUI, but this works on iOS 13.
-        @StateObject var model: MenuModel
-
+        @State var model: MenuModel
+        
         /// View model for controlling menu gestures.
-        @StateObject var gestureModel: MenuGestureModel
+        @State var gestureModel: MenuGestureModel
 
         /// Allow presenting from an external view via `$present`.
         @Binding var overridePresent: Bool
@@ -49,8 +49,8 @@ public extension Templates {
             @ViewBuilder label: @escaping (Bool) -> Label
         ) {
             _overridePresent = present
-            _model = StateObject(wrappedValue: MenuModel(buildConfiguration: buildConfiguration, startsPresented: present.wrappedValue))
-            _gestureModel = StateObject(wrappedValue: MenuGestureModel())
+            _model = State(wrappedValue: MenuModel(buildConfiguration: buildConfiguration, startsPresented: present.wrappedValue))
+            _gestureModel = State(wrappedValue: MenuGestureModel())
             self.content = content
             self.label = label
         }

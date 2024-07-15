@@ -37,7 +37,8 @@ public struct Popover: Identifiable {
         let context = Context()
         context.attributes = attributes
         self.context = context
-        self.view = AnyView(view().environmentObject(context))
+        self.view = AnyView(view().environment(context))
+//        self.view = AnyView(view().environmentObject(context))
         background = AnyView(Color.clear)
     }
 
@@ -55,8 +56,10 @@ public struct Popover: Identifiable {
         let context = Context()
         context.attributes = attributes
         self.context = context
-        self.view = AnyView(view().environmentObject(self.context))
-        self.background = AnyView(background().environmentObject(self.context))
+//        self.view = AnyView(view().environmentObject(self.context))
+        self.view = AnyView(view().environment(self.context))
+//        self.background = AnyView(background().environmentObject(self.context))
+        self.background = AnyView(background().environment(self.context))
     }
 
     /**
@@ -357,7 +360,8 @@ public struct Popover: Identifiable {
     /**
      The popover's view model (stores attributes, frame, and other visible traits).
      */
-    public class Context: Identifiable, ObservableObject {
+    @Observable
+    public class Context: Identifiable {
         /// The popover's ID. Must be unique, unless replacing an existing popover.
         public var id = UUID()
 
@@ -365,19 +369,19 @@ public struct Popover: Identifiable {
         public var attributes = Attributes()
 
         /// The popover's dynamic size, calculated from SwiftUI. If this is `nil`, the popover is not yet ready to be displayed.
-        @Published public var size: CGSize?
+         public var size: CGSize?
 
         /// The frame of the popover, without drag gesture offset applied.
-        @Published public var staticFrame = CGRect.zero
+         public var staticFrame = CGRect.zero
 
         /// The current frame of the popover.
-        @Published public var frame = CGRect.zero
+         public var frame = CGRect.zero
 
         /// The currently selected anchor, if the popover has a `.relative` position.
-        @Published public var selectedAnchor: Popover.Attributes.Position.Anchor?
+         public var selectedAnchor: Popover.Attributes.Position.Anchor?
 
         /// If this is true, the popover is the replacement of another popover.
-        @Published public var isReplacement = false
+        public var isReplacement = false
 
         /// For animation syncing. If this is not nil, the popover is in the middle of a frame refresh.
         public var transaction: Transaction?
@@ -433,12 +437,12 @@ public struct Popover: Identifiable {
 
         /// Create a context for the popover. You shouldn't need to use this - it's done automatically when you create a new popover.
         public init() {
-            changeSink = objectWillChange.sink { [weak self] in
-                guard let self = self else { return }
-                DispatchQueue.main.async {
-                    self.attributes.onContextChange?(self)
-                }
-            }
+//            changeSink = objectWillChange.sink { [weak self] in
+//                guard let self = self else { return }
+//                DispatchQueue.main.async {
+//                    self.attributes.onContextChange?(self)
+//                }
+//            }
         }
     }
 }

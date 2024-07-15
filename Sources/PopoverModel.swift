@@ -16,30 +16,42 @@ import SwiftUI
  Each view model is scoped to a window, which retains the view model.
  Presenting or otherwise managing a popover automatically scopes interactions to the window of the current view hierarchy.
  */
-class PopoverModel: ObservableObject {
+@Observable
+class PopoverModel {
     /// The currently-presented popovers. The oldest are in front, the newest at the end.
-    @Published var popovers = [Popover]()
+    var popovers = [Popover]()
 
     /// Determines if the popovers can be dragged.
-    @Published var popoversDraggable = true
+     var popoversDraggable = true
 
     /// Store the frames of views (for excluding popover dismissal or source frames).
-    @Published var frameTags: [AnyHashable: CGRect] = [:]
+     var frameTags: [AnyHashable: CGRect] = [:]
 
     /**
      Store frames of popover source views when presented using `.popover(selection:tag:attributes:view:)`. These frames are then used as excluded frames for dismissal.
 
      To opt out of this behavior, set `attributes.dismissal.excludedFrames` manually. To clear this array (usually when you present another view where the frames don't apply), use a `FrameTagReader` to call `FrameTagProxy.clearSavedFrames()`.
      */
-    @Published var selectionFrameTags: [AnyHashable: CGRect] = [:]
+     var selectionFrameTags: [AnyHashable: CGRect] = [:]
 
+    private var cnclDebug: Set<AnyCancellable> = []
+    
     init() {
         print("PopoverModel init")
+        
+        
+//        self.objectWillChange.sink { [weak self] in
+//
+//            print("PopoverModel objectWillChange")
+//
+//
+//        }.store(in: &cnclDebug)
+        
     }
     
     /// Force the container view to update.
     func reload() {
-        objectWillChange.send()
+//        objectWillChange.send()
     }
 
     /**

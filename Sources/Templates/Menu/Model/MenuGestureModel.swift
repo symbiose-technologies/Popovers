@@ -13,18 +13,19 @@ import SwiftUI
 extension Templates {
     /// Model for managing gestures that started on the source label.
     /// Gestures that started on the popover itself are handled by `MenuView`.
-    class MenuGestureModel: ObservableObject {
+    @Observable
+    class MenuGestureModel {
         /// If the user is pressing down on the label, this will be a unique `UUID`.
-        @Published var labelPressUUID: UUID?
+         var labelPressUUID: UUID?
 
         /**
          If the label was pressed/dragged when the menu was already presented.
          In this case, dismiss the menu if the user lifts their finger on the label.
          */
-        @Published var labelPressedWhenAlreadyPresented = false
+         var labelPressedWhenAlreadyPresented = false
 
         /// The current position of the user's finger.
-        @Published var dragLocation: CGPoint?
+         var dragLocation: CGPoint?
 
         /// Process the drag gesture, updating the menu to match.
         func onDragChanged(

@@ -14,7 +14,8 @@ import SwiftUI
  */
 struct PopoverContainerView: View {
     /// The view model that stores the popovers.
-    @ObservedObject var popoverModel: PopoverModel
+//    @ObservedObject var popoverModel: PopoverModel
+    @Bindable var popoverModel: PopoverModel
 
     /// The currently-dragging popover.
     @State var selectedPopover: Popover? = nil

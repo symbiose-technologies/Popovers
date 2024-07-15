@@ -89,8 +89,8 @@ public extension Templates {
 
     /// The popover that gets presented.
     internal struct MenuView<Content: View>: View {
-        @ObservedObject var model: MenuModel
-
+//        @ObservedObject var model: MenuModel
+        let model: MenuModel
         /// The menu buttons.
         var content: Content
 
@@ -113,8 +113,8 @@ public extension Templates {
                 content
 
                     /// Inject model.
-                    .environmentObject(model)
-
+//                    .environmentObject(model)
+                    .environment(model)
                     /// Work with frames.
                     .frame(maxWidth: .infinity)
                     .contentShape(Rectangle())
@@ -166,8 +166,10 @@ public extension Templates {
     /// A special button for use inside `PopoverMenu`s.
     struct MenuItem<Content: View>: View {
         @State var itemID = MenuItemID()
-        @EnvironmentObject var model: MenuModel
+//        @EnvironmentObject var model: MenuModel
+        @Environment(MenuModel.self) var model: MenuModel
 
+        
         public let action: () -> Void
         public let label: (Bool) -> Content
 
@@ -292,7 +294,8 @@ public extension Templates {
     }
 
     struct MenuGestureHotspot<Content: View>: View {
-        @EnvironmentObject var model: MenuModel
+//        @EnvironmentObject var model: MenuModel
+        @Environment(MenuModel.self) var model
         public let content: () -> Content
 
         public init(@ViewBuilder content: @escaping () -> Content) {
